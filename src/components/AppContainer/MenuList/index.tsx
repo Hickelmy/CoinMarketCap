@@ -26,12 +26,13 @@ export function MenuList() {
             key={index}
             onClick={() => handleNavigate(item.route)}
             sx={{
+              color: '#000000' ,
               textTransform: 'none',
               marginRight: '1rem',
               borderRadius: '4px',
               ...(item.route === window.location.pathname && {
                 backgroundColor: colors.primary_lightest,
-                color: colors.primary_base,
+                color: colors.neutral_base,
               }),
             }}
           >

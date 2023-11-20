@@ -18,6 +18,8 @@ export const colors = {
   neutral_lightest: '#EFEFEF',
   neutral_base: '#9A9A9A',
   neutral_darkest: '#2B2B2B',
+  button_text: '#000000',
+  button_hover: '#80899C'
 };
 
 export const LightTheme = createTheme({
