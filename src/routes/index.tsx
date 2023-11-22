@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { APP_PAGES } from './pages.routes'
 import { DefaultLayout } from '../components/layouts/DefaultLayouts';
-import { NotFound } from '../pages/NotFound';
+import { NotFoundPage } from '../pages/NotFound';
 
 export function AppRoutes() {
   return (
@@ -12,7 +12,7 @@ export function AppRoutes() {
           <Route key={route} path={route} element={component} />
         ))}
       </Route>
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }

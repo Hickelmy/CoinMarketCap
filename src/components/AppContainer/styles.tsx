@@ -4,11 +4,9 @@ import { colors } from "../../shared/themes";
 export const BoxStyled = styled(Box)(() => ({
   // width: "100%",
   textTransform: "none",
-  margin: "6rem 2rem 2rem",
-  borderRadius: "0.25rem",
-  boxShadow: "0px 3px 6px #00000029",
+  margin: "1rem 4rem 2rem",
   padding: "1.5rem",
-  background: colors.background_base,
+  background: colors.background_dark,
 }));
 
 export const ButtonStyled = styled(Button)(() => ({

@@ -1,7 +1,7 @@
 import {createTheme} from '@mui/material';
 
 export const colors = {
-  background_dark: '#F9F9F9',
+  background_dark: '#f8fafd',
   background_base: '#FFFFFF',
   primary_light: '#5E839C',
   primary_dark: '#123650',

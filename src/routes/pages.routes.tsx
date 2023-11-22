@@ -9,7 +9,7 @@ export const APP_PAGES = [
     route: '/',
     // icon: <DashboardIcon />,
     component: <Dashboard />,
-    showMenu: true,
+    showMenu: false,
   },
   {
     title: 'Cryptocurrencies',
@@ -53,4 +53,22 @@ export const APP_PAGES = [
     component: <Crypto />,
     showMenu: true,
   },
+  
+  {
+    title: 'Login',
+    route: '/login',
+    // icon: <DashboardIcon />,
+    component: <Crypto />,
+    showMenu: false,
+  },
+
+  {
+    title: 'Signup',
+    route: '/signup',
+    // icon: <DashboardIcon />,
+    component: <Crypto />,
+    showMenu: false,
+  },
+  
+  
 ]

@@ -1,16 +1,23 @@
-import React from "react";
+import { Button } from "@mui/material";
+import { NotFound } from "./Animation/lottie";
+import { NotFoundStyle } from "./styles";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Link } from "react-router-dom";
 
-export function NotFound() {
+export function NotFoundPage() {
   return (
-    <div>
-      <h1>Not found ou Core</h1>
-      <h2>
-        Se for uma rota inexistente ou que o user não tenha acesso, Not Found
-      </h2>
-      <h2>
-        Se o user fizer logout ou o token de autenticação expirar, redireciona
-        para o Core
-      </h2>
-    </div>
-  )
+    <NotFoundStyle>
+      <Link to="/">
+        <Button
+          color="success"
+          component="label"
+          variant="contained"
+          startIcon={<ArrowBackIcon />}
+        >
+          Voltar
+        </Button>
+      </Link>
+      <NotFound />;
+    </NotFoundStyle>
+  );
 }
