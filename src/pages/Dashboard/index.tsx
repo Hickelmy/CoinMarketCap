@@ -3,28 +3,58 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, FormGroup, SvgIcon, Typography } from "@mui/material";
 import { CustomSwitch, TypographyStyled, TypographySwitch } from "./style";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StarIcon from "@mui/icons-material/Star";
-import DataGridDashboard from "./datagrid";
+import { DataGridDashboard } from "./datagrid";
+import Card from "./card";
 
 export function Dashboard() {
   const [checked, setChecked] = useState(true);
+  const [localStorageVersion, setLocalStorageVersion] = useState(0);
 
   const handleChange = () => {
     setChecked(!checked);
   };
 
-  const cardData = [
-    { number: 1, title: "CH", subtitle: "$1,234", percentage: +10.44 },
-    { number: 2, title: "EOS", subtitle: "$5,678", percentage: +10.44 },
-    { number: 3, title: "BCH", subtitle: "$15,678", percentage: -10.44 },
-    { number: 4, title: "ETC", subtitle: "$15,678", percentage: -10.44 },
-    { number: 5, title: "ADA", subtitle: "$15,678", percentage: -10.44 },
-    { number: 6, title: "BCH", subtitle: "$15,678", percentage: -10.44 },
-    { number: 7, title: "THET", subtitle: "$15,678", percentage: -10.44 },
-  ];
+  const cardDataFromLocalStorage = JSON.parse(
+    localStorage.getItem("cardData") || "[]"
+  );
+  const [cardData, setCardData] = useState<any[]>(cardDataFromLocalStorage);
+
+  useEffect(() => {
+    localStorage.setItem("cardData", JSON.stringify(cardData));
+    setLocalStorageVersion((prevVersion) => prevVersion + 1);
+  }, [cardData]);
+
+  useEffect(() => {
+    console.log("LocalStorage atualizado. Atualize o componente de card.");
+  }, [localStorageVersion]);
 
   const visibleCards = checked ? cardData : [];
+
+  const [favorites, setFavorites] = useState(true);
+
+  useEffect(() => {
+    const updatedVisibleCards = checked ? cardData : [];
+    console.log("Visible Cards atualizado:", updatedVisibleCards);
+  }, [favorites, checked, cardData]);
+
+  // const handleCheckChange = (newValue) => {
+  //   console.log("newValue :", newValue);
+  //   setFavorites(newValue);
+  //   // window.location.reload();
+  // };
+
+  const handleCheckChange = (newValue) => {
+    console.log("newValue :", newValue);
+    setFavorites(newValue);
+    window.location.reload();
+    // if (newValue) {
+    //   {visibleCards.map((data, index) => (
+    //     <Card key={index} data={data} index={index} />
+    //   ))}
+    // }
+  };
 
   return (
     <Box>
@@ -66,8 +96,6 @@ export function Dashboard() {
             <Box
               key={index}
               sx={{
-                // width: 222,
-                // height: 118,
                 backgroundColor: "#FFFFFF",
                 margin: 1,
                 padding: 2,
@@ -134,7 +162,16 @@ export function Dashboard() {
             </Box>
           ))}
         </div>
-
+        ;
+        <div
+          style={{
+            overflowX: "auto",
+            whiteSpace: "nowrap",
+            display: "flex",
+            maxWidth: "100%",
+          }}
+        ></div>
+        <DataGridDashboard onCheckChange={handleCheckChange} />
       </Box>
     </Box>
   );
