@@ -54,7 +54,6 @@ export const CustomSearchFilter = styled("div")({
   marginLeft: "auto", 
 });
 
-
 export const RightAppbar = styled("div")({
   display: "flex",
   alignItems: "center",
@@ -64,9 +63,6 @@ export const RightAppbar = styled("div")({
     marginRight: "8px",
   },
 });
-
-
-
 
 export const SearchInput = styled(InputBase)(({ theme }) => ({
   color: "#A7B1C2",
@@ -141,7 +137,6 @@ export const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-
 export const iconContainerStyles = {
   backgroundColor: "#A7B1C2",
   borderRadius: "4px",
@@ -151,7 +146,6 @@ export const iconContainerStyles = {
   alignItems: "center",
   justifyContent: "center",
   marginLeft: "8px",
-
 };
 
 export const iconStyles = {
