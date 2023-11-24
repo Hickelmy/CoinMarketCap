@@ -5,6 +5,7 @@ import { ToastProvider } from "./shared/hooks/useToast";
 import { ThemeProvider } from "@emotion/react";
 import { LightTheme } from "./shared/themes";
 import { AppRoutes } from "./routes";
+import { SearchProvider } from "./shared/hooks/useSearch";
 
 export function App() {
   return (
@@ -13,7 +14,9 @@ export function App() {
         <ModalProvider>
           <ToastProvider>
             <ToastContainer />
+            <SearchProvider>
             <AppRoutes />
+            </SearchProvider>
           </ToastProvider>
         </ModalProvider>
       </BrowserRouter>
