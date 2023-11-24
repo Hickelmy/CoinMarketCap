@@ -29,7 +29,9 @@ const CustomTable = ( props: TableGridProps ) => {
     setStarStates((prevStarStates) => {
       const newStarStates = { ...prevStarStates, [id]: !prevStarStates[id] };
       localStorage.setItem("starStates", JSON.stringify(newStarStates));
+      window.location.reload();
       return newStarStates;
+      
     });
   }
   
