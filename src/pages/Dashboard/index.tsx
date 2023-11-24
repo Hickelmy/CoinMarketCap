@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, FormGroup} from "@mui/material";
+import { Box, FormGroup } from "@mui/material";
 import { CustomSwitch, TypographyStyled, TypographySwitch } from "./style";
 import { useEffect, useState } from "react";
 import CustomTable from "./datagrid";
@@ -29,7 +29,7 @@ export function Dashboard() {
   const [skip, setSkip] = useState(0);
   const [take, setTake] = useState(25);
   const [total, setTotal] = useState(0);
-
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const [checked, setChecked] = useState(
     localStorage.getItem("highlightSwitch") === "true" || false
@@ -86,8 +86,13 @@ export function Dashboard() {
 
       setRows(data);
       setTotal(data.length);
+
+      setApiError(null);
     } catch (error) {
       console.error(error);
+      setApiError(
+        "Ocorreu um erro ao obter os dados. Tente novamente mais tarde."
+      );
     }
   }
 
@@ -122,7 +127,11 @@ export function Dashboard() {
 
     setStarStates(initialStarStates);
 
-    const fetchData = async (favoriteCoins: string[]) => {
+    const fetchData = async () => {
+      const favoriteCoins = Object.keys(initialStarStates).filter(
+        (coin) => initialStarStates[coin]
+      );
+
       const coinRequests = favoriteCoins.map((coin) =>
         fetch(`https://api.coingecko.com/api/v3/coins/${coin}`)
       );
@@ -133,7 +142,7 @@ export function Dashboard() {
           coinResponses.map((response) => response.json())
         );
 
-        const formattedCoinData: minCoinData[] = coinDataList.map((coinData) => ({
+        const formattedCoinData: any[] = coinDataList.map((coinData) => ({
           id: coinData.id,
           name: coinData.name,
           symbol: coinData.symbol,
@@ -148,30 +157,15 @@ export function Dashboard() {
         }));
 
         setCoinData(formattedCoinData);
-        localStorage.setItem("cachedData", JSON.stringify({ data: formattedCoinData, timestamp: new Date().getTime() }));
       } catch (error) {
         console.error("Erro ao obter dados das moedas favoritas:", error);
       }
     };
 
-    const cachedData = JSON.parse(localStorage.getItem("cachedData") || '{}');
-    const currentTime = new Date().getTime();
-
-    if (Object.keys(initialStarStates).length > 0 && currentTime - (cachedData.timestamp || 0) > 60000) {
-      const favoriteCoins = Object.keys(initialStarStates).filter(
-        (coin) => initialStarStates[coin]
-      );
-
-      if (favoriteCoins.length > 0) {
-        fetchData(favoriteCoins);
-      }
-    } else {
-      if (JSON.stringify(cachedData.data) !== JSON.stringify(coinData)) {
-        setCoinData(cachedData.data || []);
-      }
+    if (Object.keys(initialStarStates).length > 0) {
+      fetchData();
     }
-  }, [coinData]); 
-
+  }, []);
 
   return (
     <Box>
@@ -185,10 +179,6 @@ export function Dashboard() {
         <TypographyStyled>
           Preço das criptomoedas por valor de mercado
         </TypographyStyled>
-
-        {/* <div >
-          <Search value={FILTERS} />
-        </Grid> */}
 
         <FormGroup
           sx={{ display: "flex", alignItems: "center", flexDirection: "row" }}
