@@ -26,7 +26,6 @@ interface minCoinData {
   current_price: number;
   market_cap: number;
   market_cap_rank: number;
-  // Adicione outras propriedades conforme necessário
 }
 
 export function Dashboard() {
@@ -37,10 +36,13 @@ export function Dashboard() {
 
   // const { actionToast } = useToast();
   // const [intervalId, setIntervalId] = useState<any | null>(null);
-  const [checked, setChecked] = useState(true);
-
+  const [checked, setChecked] = useState(
+    localStorage.getItem("highlightSwitch") === "true" || false
+  );
   const handleChange = () => {
-    setChecked(!checked);
+    const newChecked = !checked;
+    setChecked(newChecked);
+    localStorage.setItem("highlightSwitch", newChecked.toString());
   };
 
   const debouncedListAll = debounce(listAll, 1000);
@@ -175,6 +177,8 @@ export function Dashboard() {
   }, []);
 
 
+ 
+  
 
   return (
     <Box>
@@ -208,6 +212,7 @@ export function Dashboard() {
       </Box>
 
       <Box>
+      {checked && (
         <div
           style={{
             overflowX: "auto",
@@ -220,6 +225,7 @@ export function Dashboard() {
             <CoinCard key={index} coinData={data} index={index} />
           ))}
         </div>
+          )}
         <div
           style={{
             overflowX: "auto",
