@@ -2,16 +2,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, FormGroup, SvgIcon, Typography } from "@mui/material";
+import { Box, FormGroup} from "@mui/material";
 import { CustomSwitch, TypographyStyled, TypographySwitch } from "./style";
 import { useEffect, useState } from "react";
-import StarIcon from "@mui/icons-material/Star";
 import CustomTable from "./datagrid";
 import { columns } from "./datagrid/columns";
 import { CoinData } from "./interface";
-// import { useToast } from "../../shared/hooks/useToast";
-// import { useSearch } from "../../shared/hooks/useSearch";
-// import { ArrayDifference } from "../../utils/ValidatingEqualObjects";
 import { debounce } from "lodash";
 import CoinCard from "./card";
 
@@ -34,8 +30,7 @@ export function Dashboard() {
   const [take, setTake] = useState(25);
   const [total, setTotal] = useState(0);
 
-  // const { actionToast } = useToast();
-  // const [intervalId, setIntervalId] = useState<any | null>(null);
+
   const [checked, setChecked] = useState(
     localStorage.getItem("highlightSwitch") === "true" || false
   );
@@ -62,8 +57,7 @@ export function Dashboard() {
         const currentTime = new Date().getTime();
         const elapsedTime = currentTime - parseInt(cachedTimestamp);
 
-        // Verifica se o cache ainda é válido (menos de 30 minutos)
-        if (elapsedTime < 1800000) {
+        if (elapsedTime < 60000) {
           const parsedData = JSON.parse(cachedData);
           setRows(parsedData.rows);
           setTotal(parsedData.total);
@@ -71,7 +65,6 @@ export function Dashboard() {
         }
       }
 
-      // Se não houver dados em cache ou se o cache expirou, faça uma nova solicitação à API
       const response = await fetch(
         `https://api.coingecko.com/api/v3/coins/markets/?vs_currency=usd&page=${skip}&per_page=${take}`
       );
@@ -82,7 +75,6 @@ export function Dashboard() {
 
       const data = await response.json();
 
-      // Salva dados no cache e o timestamp atual
       localStorage.setItem(
         `apiData_${skip}_${take}`,
         JSON.stringify({ rows: data, total: data.length })
@@ -99,7 +91,6 @@ export function Dashboard() {
     }
   }
 
-  // Função de listagem que será chamada com debounce
   const handleListAllDebounced = (skip: number, take: number) => {
     debouncedListAll(skip, take);
   };
@@ -120,12 +111,9 @@ export function Dashboard() {
     setTake(newTake);
   };
 
-  const [coinData, setCoinData] = useState<CoinData[]>([]);
+  const [coinData, setCoinData] = useState<any[]>([]);
   const [starStates, setStarStates] = useState<Record<string, boolean>>({});
-  
 
-
-  
   useEffect(() => {
     const storedStarStates = localStorage.getItem("starStates");
     const initialStarStates: Record<string, boolean> = storedStarStates
@@ -134,13 +122,7 @@ export function Dashboard() {
 
     setStarStates(initialStarStates);
 
-    const fetchData = async () => {
-      // Obter as moedas guardadas no localStorage
-      const favoriteCoins = Object.keys(initialStarStates).filter(
-        (coin) => initialStarStates[coin]
-      );
-
-      // Fazer solicitações para a API para obter dados das moedas favoritas
+    const fetchData = async (favoriteCoins: string[]) => {
       const coinRequests = favoriteCoins.map((coin) =>
         fetch(`https://api.coingecko.com/api/v3/coins/${coin}`)
       );
@@ -151,7 +133,7 @@ export function Dashboard() {
           coinResponses.map((response) => response.json())
         );
 
-        const formattedCoinData: any[] = coinDataList.map((coinData) => ({
+        const formattedCoinData: minCoinData[] = coinDataList.map((coinData) => ({
           id: coinData.id,
           name: coinData.name,
           symbol: coinData.symbol,
@@ -166,19 +148,30 @@ export function Dashboard() {
         }));
 
         setCoinData(formattedCoinData);
+        localStorage.setItem("cachedData", JSON.stringify({ data: formattedCoinData, timestamp: new Date().getTime() }));
       } catch (error) {
         console.error("Erro ao obter dados das moedas favoritas:", error);
       }
     };
 
-    if (Object.keys(initialStarStates).length > 0) {
-      fetchData();
+    const cachedData = JSON.parse(localStorage.getItem("cachedData") || '{}');
+    const currentTime = new Date().getTime();
+
+    if (Object.keys(initialStarStates).length > 0 && currentTime - (cachedData.timestamp || 0) > 60000) {
+      const favoriteCoins = Object.keys(initialStarStates).filter(
+        (coin) => initialStarStates[coin]
+      );
+
+      if (favoriteCoins.length > 0) {
+        fetchData(favoriteCoins);
+      }
+    } else {
+      if (JSON.stringify(cachedData.data) !== JSON.stringify(coinData)) {
+        setCoinData(cachedData.data || []);
+      }
     }
-  }, []);
+  }, [coinData]); 
 
-
- 
-  
 
   return (
     <Box>
@@ -212,20 +205,20 @@ export function Dashboard() {
       </Box>
 
       <Box>
-      {checked && (
-        <div
-          style={{
-            overflowX: "auto",
-            whiteSpace: "nowrap",
-            display: "flex",
-            maxWidth: "100%",
-          }}
-        >
-          {coinData.map((data, index) => (
-            <CoinCard key={index} coinData={data} index={index} />
-          ))}
-        </div>
-          )}
+        {checked && (
+          <div
+            style={{
+              overflowX: "auto",
+              whiteSpace: "nowrap",
+              display: "flex",
+              maxWidth: "100%",
+            }}
+          >
+            {coinData.map((data, index) => (
+              <CoinCard key={index} coinData={data} index={index} />
+            ))}
+          </div>
+        )}
         <div
           style={{
             overflowX: "auto",

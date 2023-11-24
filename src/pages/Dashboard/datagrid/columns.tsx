@@ -1,9 +1,6 @@
 import { GridColDef } from "@mui/x-data-grid";
-// import StarIcon from "@mui/icons-material/Star";
 import InfoIcon from "@mui/icons-material/Info";
 import { CustomMaterialUIButton, CustomTypographyStyled } from "./style";
-// import StarBorderIcon from "@mui/icons-material/StarBorder";
-// import styled from "@emotion/styled";
 import { IconButton, Tooltip } from "@mui/material";
 import { CoinData } from "../interface";
 
@@ -28,49 +25,8 @@ const PercentageCell = ({ value }: { value: number }) => (
   </div>
 );
 
-//   const MarketCapCell = ({ value }: { value: number }) => (
-//     <div style={{ display: "flex", alignItems: "center" }}>
-//       {formatCurrency(value)}
-//     </div>
-//   );
-
-//   const handleStarClick = (id: string | number) => {
-//     setStarStates((prevStarStates) => {
-//       const newStarStates = { ...prevStarStates, [id]: !prevStarStates[id] };
-//       localStorage.setItem("starStates", JSON.stringify(newStarStates));
-
-//       onCheckChange(!starStates);
-
-//       return newStarStates;
-//     });
-
-// const StarColumnContainer = styled("div")({
-//     display: "flex",
-//     flexDirection: "column",
-//     alignItems: "center",
-//   });
 
 export const columns: GridColDef[] = [
-  // {
-  //   field: "star",
-  //   headerName: "",
-  //   width: 50,
-  //   //   renderCell: (params: { row: CoinData }) => (
-  //   //     <StarColumnContainer>
-  //   //       {starStates[params.row.id] ? (
-  //   //         <StarIcon
-  //   //           style={{ color: "#F6B87E", cursor: "pointer" }}
-  //   //           onClick={() => handleStarClick(params.row.id)}
-  //   //         />
-  //   //       ) : (
-  //   //         <StarBorderIcon
-  //   //           style={{ cursor: "pointer" }}
-  //   //           onClick={() => handleStarClick(params.row.id)}
-  //   //         />
-  //   //       )}
-  //   //     </StarColumnContainer>
-  //   //   ),
-  // },
   {
     field: "market_cap_rank",
     headerName: "#",
